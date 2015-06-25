@@ -1,7 +1,16 @@
 # Actors benchmark
 
-Compare different languages/framework on actors model implementation
+Compare different languages/framework on actors model implementation.
 
-Origin:
-https://www.sics.se/~joe/ericsson/du98024.html
+The algortihtm is described here: https://www.sics.se/~joe/ericsson/du98024.html
 
+Feel free to PR your preferred framework/language implementation.
+
+## Usage
+
+Each dir should contain a Makefile with default rule:
+- compiling the code
+- run the benchmark handling the following env var:
+  * ZOG_THREADS = number of threads in the ring
+  * ZOG_MSGS = number of exchanged messages
+  
