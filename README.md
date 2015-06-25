@@ -11,6 +11,6 @@ Feel free to PR your preferred framework/language implementation.
 Each dir should contain a Makefile with default rule:
 - compiling the code
 - run the benchmark handling the following env var:
-  * ZOG_THREADS = number of threads in the ring
-  * ZOG_MSGS = number of exchanged messages
+  * ZOG_THREADS = number of threads in the ring (default to 1000)
+  * ZOG_MSGS = number of exchanged messages (default to 1000)
   
