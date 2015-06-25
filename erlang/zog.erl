@@ -9,19 +9,22 @@
 
 -export([start/0, start/1, start/2]).
 
--export([run/2, process/1]).			% Local exports - ouch
+-export([run/3, process/1]).			% Local exports - ouch
 
 start() -> start(16000).
 
 start(N) -> start(N, 1000000).
 
-start(N, M) -> spawn(?MODULE, run, [N, M]).
+start(N, M) -> 
+    Pid = spawn(?MODULE, run, [N, M, self()]),
+    receive
+	{stop, Pid} -> halt()
+    end.
 
-
-run(N, M) when N < 1 ->
+run(N, _, _) when N < 1 ->
     io:format("Must be at least 1 process~n", []),
     0.0;
-run(N, M) ->
+run(N, M, Main) ->
     statistics(wall_clock),
 
     Pid = setup(N-1, self()),
@@ -42,8 +45,8 @@ run(N, M) ->
     Time = 1000*T2/(M+K),
     io:format("Run   : ~w s (~w us per msg) (~w msgs)~n",
 	      [T2/1000, Time, (M+K)]),
-
-    Time.
+    Main ! {stop, self()}.
+    
 
 setup(0, OldPid) ->
     OldPid;
