@@ -1,28 +1,35 @@
 import akka.actor.ActorSystem
 
-/**
- * Created by gbecan on 10/1/15.
- */
 object ZogApp extends App {
 
-  val n = args(0).toInt
-  val m = args(1).toInt
+  val numberOfActors = args(0).toInt
+  val numberOfMessages = args(1).toInt
 
-  // Creating actors
+  // Starting actor system
+  val initStart = System.currentTimeMillis()
   val actorSystem = ActorSystem("zog")
 
-  val first = actorSystem.actorOf(Zog.props, "0")
+  // Creating monitor actor
+  val monitor = actorSystem.actorOf(Monitor.props(numberOfActors, numberOfMessages), "monitor")
+  monitor ! ("initStart", initStart)
+
+  // Creating actors for benchmark
+  val first = actorSystem.actorOf(Zog.props(monitor), "0")
 
   var previous = first
 
-  val actors = for (i <- 1 to n) yield {
-    val actor = actorSystem.actorOf(Zog.props, i.toString)
+  val actors = for (i <- 1 until numberOfActors) yield {
+    val actor = actorSystem.actorOf(Zog.props(monitor), i.toString)
     previous ! actor
     previous = actor
   }
 
   previous ! first
 
-  first ! m
+  val initEnd = System.currentTimeMillis()
+  monitor ! ("initEnd", initEnd)
+
+  // Send messages
+  first ! numberOfMessages
 
 }

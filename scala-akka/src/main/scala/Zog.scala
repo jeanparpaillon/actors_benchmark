@@ -1,23 +1,20 @@
 import akka.actor.{PoisonPill, Actor, ActorRef, Props}
 
-class Zog() extends Actor {
+class Zog(val monitor : ActorRef) extends Actor {
 
   private var next : ActorRef = _
 
   override def receive = {
     case 0 =>
-      context.system.terminate()
-      println("terminate")
+      monitor ! ("runEnd", System.currentTimeMillis())
     case m : Int =>
       next ! m-1
-      println(self.path + " : " + m)
     case nextActor : ActorRef =>
       next = nextActor
-      println(next.path)
   }
 
 }
 
 object Zog {
-  def props : Props = Props(new Zog)
+  def props(monitor : ActorRef) : Props = Props(new Zog(monitor))
 }
