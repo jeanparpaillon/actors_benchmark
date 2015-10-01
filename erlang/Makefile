@@ -6,7 +6,7 @@ ZOG_MSGS ?= 1000
 all: run
 
 run: zog.beam
-	$(ERL) -noshell -eval 'zog:start('$(ZOG_THREADS)','$(ZOG_MSGS)').'
+	$(ERL) $(ERL_OPTS) -noshell -eval 'zog:start('$(ZOG_THREADS)','$(ZOG_MSGS)').'
 
 clean:
 	-rm -f *.beam *~
