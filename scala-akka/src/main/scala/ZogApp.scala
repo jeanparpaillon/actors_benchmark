@@ -18,7 +18,7 @@ object ZogApp extends App {
 
   var previous = first
 
-  val actors = for (i <- 1 until numberOfActors) yield {
+  for (i <- 1 until numberOfActors) {
     val actor = actorSystem.actorOf(Zog.props(monitor), i.toString)
     previous ! actor
     previous = actor
