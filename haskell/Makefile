@@ -1,3 +1,5 @@
+SHELL = /bin/bash
+
 ZOG_THREADS ?= 1000
 ZOG_MSGS ?= 1000
 
